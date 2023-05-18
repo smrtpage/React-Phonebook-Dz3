@@ -1,0 +1,30 @@
+.inputSection {
+  display: flex;
+  flex-direction: column;
+}
+
+input:focus {
+  outline: none;
+}
+
+.btnSubmit {
+  height: 40px;
+  padding: 10px 30px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 20px;
+  background-color: rgb(75, 207, 30);
+}
+
+input {
+  padding: 10px;
+}
+
+form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
