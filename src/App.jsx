@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
+import { motion, AnimatePresence } from "framer-motion";
 
 function initContacts() {
   const contacts = localStorage.getItem("contacts");
@@ -71,12 +72,10 @@ function App() {
       <h2>Contacts</h2>
       <div className={styles.contactsSection}>
         <Filter onFilterChange={setFilter} filterValue={filter} />
-        {filteredContacts.length !== 0 && (
-          <ContactList
-            contacts={filteredContacts}
-            onDeleteContact={deleteContact}
-          />
-        )}
+        <ContactList
+          contacts={filteredContacts}
+          onDeleteContact={deleteContact}
+        />
       </div>
     </div>
   );
