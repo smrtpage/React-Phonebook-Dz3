@@ -5,6 +5,12 @@ import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  getAllContactsService,
+  createContactService,
+  removeContactService,
+} from "./components/services/contactsServices";
+import axios from "axios";
 
 function initContacts() {
   const contacts = localStorage.getItem("contacts");
@@ -20,33 +26,32 @@ function App() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
+    getAllContactsService().then((data) => setContacts(data));
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
   function addContact(name, number) {
-    const newContact = {
-      name: name,
-      id: nanoid(),
-      number: +number,
-    };
-
-    const existingContact = contacts.find(
-      (contact) => contact.name === newContact.name
-    );
+    const existingContact = contacts.find((contact) => contact.name === name);
 
     if (existingContact) {
       alert(existingContact.name + " is already exists!");
       return;
     }
 
-    setContacts((prevContacts) => [newContact, ...prevContacts]);
-    console.log(newContact);
+    createContactService(name, number).then((newContact) => {
+      setContacts((prevContacts) => [newContact, ...prevContacts]);
+    });
   }
 
   function deleteContact(id) {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== id)
-    );
+    removeContactService(id).then(() => {
+      setContacts((prevContacts) =>
+        prevContacts.filter((contact) => contact.id !== id)
+      );
+    });
   }
 
   function checkContact(name) {
