@@ -44,7 +44,13 @@ function App() {
       return;
     }
 
-    dispatch(addContactAction(name, number));
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+
+    dispatch(addContactAction(newContact));
   }
 
   function deleteContact(id) {
