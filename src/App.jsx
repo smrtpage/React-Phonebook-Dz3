@@ -4,15 +4,17 @@ import styles from "./App.module.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
-import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addContactAction,
   deleteContactAction,
+  setQueryAction,
 } from "./redux/contacts/contactsAction";
-
-import axios from "axios";
-import { contactsSelector } from "./redux/contacts/contactsSelectors";
+import {
+  selectContacts,
+  selectQuery,
+  selectFilteredContacts,
+} from "./redux/contacts/contactsSelectors";
 
 // function initContacts() {
 //   const contacts = localStorage.getItem("contacts");
@@ -24,8 +26,9 @@ import { contactsSelector } from "./redux/contacts/contactsSelectors";
 // }
 
 function App() {
-  const contacts = useSelector(contactsSelector);
-  const [filter, setFilter] = useState("");
+  const contacts = useSelector(selectContacts);
+  const query = useSelector(selectQuery);
+  const filteredContacts = useSelector(selectFilteredContacts);
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -70,21 +73,16 @@ function App() {
   //   });
   // }
 
-  const filteredContacts = contacts.filter((contact) => {
-    if (contact.name.includes(filter)) {
-      return true;
-    } else {
-      return false;
-    }
-  });
-
   return (
     <div className={styles.container}>
       <h2>Phonebook</h2>
       <ContactForm onAddContact={addContact} />
       <h2>Contacts</h2>
       <div className={styles.contactsSection}>
-        <Filter onFilterChange={setFilter} filterValue={filter} />
+        <Filter
+          onFilterChange={(value) => dispatch(setQueryAction(value))}
+          filterValue={query}
+        />
         <ContactList
           contacts={filteredContacts}
           onDeleteContact={deleteContact}
